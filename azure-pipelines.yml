@@ -34,38 +34,50 @@ stages:
               command: 'custom'
               custom: 'ef'
               arguments: 'database update --project=AspNetCoreTests/AspNetCoreTests.Web/'
-          - task: DotNetCoreCLI@2
-            displayName: Build
+          - task: DockerInstaller@0
             inputs:
-              command: 'build'
-              projects: 'AspNetCoreTests/AspNetCoreTests.UnitTests/AspNetCoreTests.UnitTests.csproj'
-              arguments: '--configuration $(BuildConfiguration)'
-          - task: DotNetCoreCLI@2
-            displayName: Publish
+              dockerVersion: '17.09.0-ce'
+          - task: Docker@2
             inputs:
-              command: 'publish'
-              publishWebProjects: true
-              arguments: '--output $(build.artifactstagingdirectory)'
-          - task: PublishBuildArtifacts@1
-            displayName: PublishBuildArtifacts
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop'
-              publishLocation: 'Container'
+              containerRegistry: 'aspdotnet'
+              repository: 'aspdotnet2023'
+              command: 'buildAndPush'
+              Dockerfile: '**/Dockerfile'
+              tags: $(Build.BuildId)
+            
+          
+          # - task: DotNetCoreCLI@2
+          #   displayName: Build
+          #   inputs:
+          #     command: 'build'
+          #     projects: 'AspNetCoreTests/AspNetCoreTests.UnitTests/AspNetCoreTests.UnitTests.csproj'
+          #     arguments: '--configuration $(BuildConfiguration)'
+          # - task: DotNetCoreCLI@2
+          #   displayName: Publish
+          #   inputs:
+          #     command: 'publish'
+          #     publishWebProjects: true
+          #     arguments: '--output $(build.artifactstagingdirectory)'
+          # - task: PublishBuildArtifacts@1
+          #   displayName: PublishBuildArtifacts
+          #   inputs:
+          #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          #     ArtifactName: 'drop'
+          #     publishLocation: 'Container'
 
-  - stage: Deploy
-    jobs:
-      - job: deploy
-        pool:
-         vmImage: 'ubuntu-latest'
-        steps:
-          - task: DownloadBuildArtifacts@1
-            displayName: DownloadBuildArtifacts
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'drop'
-              downloadPath: '$(System.ArtifactsDirectory)'
+  # - stage: Deploy
+  #   jobs:
+  #     - job: deploy
+  #       pool:
+  #        vmImage: 'ubuntu-latest'
+  #       steps:
+  #         - task: DownloadBuildArtifacts@1
+  #           displayName: DownloadBuildArtifacts
+  #           inputs:
+  #             buildType: 'current'
+  #             downloadType: 'single'
+  #             artifactName: 'drop'
+  #             downloadPath: '$(System.ArtifactsDirectory)'
           # - task: AzureRmWebAppDeployment@4
           #   displayName: Webapp Deploy
           #   inputs:
