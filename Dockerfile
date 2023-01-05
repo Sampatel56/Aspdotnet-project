@@ -3,13 +3,13 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 
 FROM sdk AS build
 COPY . /src
-WORKDIR "/src/AspNetCoreTests.Web/"
+WORKDIR "/src/AspNetCoreTests/AspNetCoreTests.Web/"
 
 RUN dotnet restore
 RUN dotnet build
 
 FROM build AS publish
-WORKDIR "/src/AspNetCoreTests.Web/"
+WORKDIR "/src/AspNetCoreTests/AspNetCoreTests.Web/"
 RUN dotnet publish -c Release -o /app
 
 FROM runtime AS final
