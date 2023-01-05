@@ -33,7 +33,7 @@ stages:
             inputs:
               command: 'custom'
               custom: 'ef'
-              arguments: 'database update --msbuildprojectextensionspath'
+              arguments: 'database update --project=AspNetCoreTests.Web.dll'
           - task: DockerInstaller@0
             inputs:
               dockerVersion: '17.09.0-ce'
