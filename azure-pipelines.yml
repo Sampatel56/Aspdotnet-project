@@ -29,16 +29,16 @@ stages:
               command: 'custom'
               custom: 'tool'
               arguments: 'install --global dotnet-ef'
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: 'custom'
-              custom: 'ef'
-              arguments: 'migrations script --output $(Build.SourcesDirectory)/SQL/AspNetCoreTests.Web.sql --idempotent --no-build --context AspNetCoreTests.Web --project AspNetCoreTests/AspNetCoreTests.Web/AspNetCoreTests.Web.csproj -s AspNetCoreTests.Web--verbose'
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: '$(Build.SourcesDirectory)/SQL'
-              ArtifactName: 'drop'
-              publishLocation: 'Container'
+          # - task: DotNetCoreCLI@2
+          #   inputs:
+          #     command: 'custom'
+          #     custom: 'ef'
+          #     arguments: 'migrations script --output $(Build.SourcesDirectory)/SQL/AspNetCoreTests.Web.sql --idempotent --no-build --context AspNetCoreTests.Web --project AspNetCoreTests/AspNetCoreTests.Web/AspNetCoreTests.Web.csproj -s AspNetCoreTests.Web--verbose'
+          # - task: PublishBuildArtifacts@1
+          #   inputs:
+          #     PathtoPublish: '$(Build.SourcesDirectory)/SQL'
+          #     ArtifactName: 'drop'
+          #     publishLocation: 'Container'
           - task: DockerInstaller@0
             inputs:
               dockerVersion: '17.09.0-ce'
