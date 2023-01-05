@@ -45,7 +45,30 @@ stages:
               Dockerfile: '**/Dockerfile'
               tags: $(Build.BuildId)
             
-          
+  - stage: Deploy
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    dependsOn: Build
+    jobs:
+      - deployment: dev
+        displayName: Dev-Deploy
+        workspace:
+          clean: all
+        pool:
+         vmImage: 'ubuntu-latest'
+        # environment:
+        #  name: devdeploy
+        # variables:
+        #   - template: devdeploy.yml
+        strategy:
+         runOnce:
+           deploy:
+             steps:
+              - 
+        
+        
+
+
+
           # - task: DotNetCoreCLI@2
           #   displayName: Build
           #   inputs:
