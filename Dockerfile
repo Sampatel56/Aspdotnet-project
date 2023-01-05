@@ -5,7 +5,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["AspNetCoreTests.Web/AspNetCoreTests.Web.csproj", "AspNetCoreTests.Web/"]
+COPY "AspNetCoreTests.Web/AspNetCoreTests.Web.csproj", "AspNetCoreTests.Web/"
 RUN dotnet restore "AspNetCoreTests.Web/AspNetCoreTests.Web.csproj"
 COPY . .
 WORKDIR "/src/AspNetCoreTests.Web"
