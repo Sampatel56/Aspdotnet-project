@@ -33,7 +33,7 @@ stages:
             inputs:
               command: 'custom'
               custom: 'ef'
-              arguments: 'migrations script --output $(Build.SourcesDirectory)/SQL/tododbscript.sql --no-build --context DemoDbContext --idempotent --project AspNetCoreTests/AspNetCoreTests.Web/AspNetCoreTests.Web.csproj -s AspNetCoreTests/AspNetCoreTests.Web'
+              arguments: 'migrations script --output $(Build.SourcesDirectory)/SQL/tododbscript.sql --no-build --context DemoDbContext --project AspNetCoreTests/AspNetCoreTests.Web/AspNetCoreTests.Web.csproj -s AspNetCoreTests/AspNetCoreTests.Web'
               workingDirectory: '$(Build.SourcesDirectory)'
           - task: DockerInstaller@0
             inputs:
