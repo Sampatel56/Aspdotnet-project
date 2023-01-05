@@ -55,8 +55,8 @@ stages:
           clean: all
         pool:
          vmImage: 'ubuntu-latest'
-        # environment:
-        #  name: devdeploy
+        environment:
+         name: devdeploy
         # variables:
         #   - template: devdeploy.yml
         strategy:
