@@ -1,0 +1,45 @@
+name: ASPDOTNET.$(BuildId)
+trigger:
+  branches:
+     include:
+       - main
+pool:
+ vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Build
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'restore'
+              projects: 'AspNetCoreTests/AspNetCoreTests.Web/AspNetCoreTests.Web.csproj'
+              feedsToUse: 'select'
+              
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'test'
+              projects: 'AspNetCoreTests/AspNetCoreTests.UnitTests/AspNetCoreTests.UnitTests.csproj'
+              arguments: '--logger trx'
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'custom'
+              custom: 'tool'
+              arguments: 'install --global dotnet-ef'
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'custom'
+              custom: 'ef'
+              arguments: 'database update --project=AspNetCoreTests'
+          - task: DockerInstaller@0
+            inputs:
+              dockerVersion: '17.09.0-ce'
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'aspdotnet'
+              repository: 'aspdotnet2023'
+              command: 'buildAndPush'
+              Dockerfile: '**/Dockerfile'
