@@ -33,7 +33,7 @@ stages:
             inputs:
               command: 'custom'
               custom: 'ef'
-              arguments: 'database update --project=AspNetCoreTests.Web'
+              arguments: 'database update --project=AspNetCoreTests'
           - task: DockerInstaller@0
             inputs:
               dockerVersion: '17.09.0-ce'
