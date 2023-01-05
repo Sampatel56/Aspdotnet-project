@@ -69,7 +69,12 @@ stages:
          runOnce:
            deploy:
              steps:
-             
+             - task: DownloadBuildArtifacts@1
+               inputs:
+                 buildType: 'current'
+                 downloadType: 'single'
+                 artifactName: 'drop'
+                 downloadPath: '$(System.ArtifactsDirectory)'
              - task: AzureRmWebAppDeployment@4
                inputs:
                    ConnectionType: 'AzureRM'
@@ -79,6 +84,7 @@ stages:
                    DockerNamespace: 'aspdotnet2023.azurecr.io'
                    DockerRepository: 'aspdotnet2023'
                    DockerImageTag: '$(Build.BuildId)'
+             
              - task: SqlAzureDacpacDeployment@1
                inputs:
                  azureSubscription: 'Azure subscription 1(1)(62d23974-1452-401f-ae2f-b88e5377196d)'
