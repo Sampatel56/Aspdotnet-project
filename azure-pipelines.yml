@@ -35,6 +35,11 @@ stages:
               custom: 'ef'
               arguments: 'migrations script --output $(Build.SourcesDirectory)/SQL/tododbscript.sql --no-build --context DemoDbContext --project AspNetCoreTests/AspNetCoreTests.Web/AspNetCoreTests.Web.csproj -s AspNetCoreTests/AspNetCoreTests.Web'
               workingDirectory: '$(Build.SourcesDirectory)'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)/SQL'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
           - task: DockerInstaller@0
             inputs:
               dockerVersion: '17.09.0-ce'
@@ -74,6 +79,17 @@ stages:
                    DockerNamespace: 'aspdotnet2023.azurecr.io'
                    DockerRepository: 'aspdotnet2023'
                    DockerImageTag: '$(Build.BuildId)'
+             - task: SqlAzureDacpacDeployment@1
+               inputs:
+                 azureSubscription: 'Azure subscription 1(1)(62d23974-1452-401f-ae2f-b88e5377196d)'
+                 AuthenticationType: 'server'
+                 ServerName: 'aspdotnet2023.database.windows.net'
+                 DatabaseName: 'aspdotnet2023'
+                 SqlUsername: 'satest566'
+                 SqlPassword: 'admin@123'
+                 deployType: 'SqlTask'
+                 SqlFile: '$(System.ArtifactsDirectory)/drop/tododbscript.sql'
+                 IpDetectionMethod: 'AutoDetect'
         
         
 
