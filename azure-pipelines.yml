@@ -4,14 +4,14 @@ trigger:
      include:
        - master
 pool:
- vmImage: 'ubuntu-latest'
+ vmImage: 'windows-latest'
 
 stages:
   - stage: Build
     jobs:
       - job: Build
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'windows-latest'
         steps:
           - task: DotNetCoreCLI@2
             inputs:
@@ -60,7 +60,7 @@ stages:
         workspace:
           clean: all
         pool:
-         vmImage: 'ubuntu-latest'
+         vmImage: 'windows-latest'
         environment:
          name: devdeploy
         # variables:
