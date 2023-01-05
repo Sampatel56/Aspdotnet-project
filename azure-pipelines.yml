@@ -33,7 +33,7 @@ stages:
             inputs:
               command: 'custom'
               custom: 'ef'
-              arguments: 'database update --project=AspNetCoreTests.Web.dll'
+              arguments: 'migrations script --output $(Build.SourcesDirectory)/SQL/AspNetCoreTests.Web.sql --idempotent --no-build --context AspNetCoreTests.Web --project AspNetCoreTests/AspNetCoreTests.Web/AspNetCoreTests.Web.csproj -s AspNetCoreTests.Web--verbose'
           - task: DockerInstaller@0
             inputs:
               dockerVersion: '17.09.0-ce'
