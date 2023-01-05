@@ -18,4 +18,4 @@ COPY --from=publish /app .
 
 EXPOSE 80
 
-ENTRYPOINT ["dotnet", "SampleApp.dll", "--urls", "http://*:80"]
+ENTRYPOINT ["dotnet", "AspNetCoreTests.Web.dll", "--urls", "http://*:80"]
