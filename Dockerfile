@@ -5,7 +5,7 @@ FROM sdk AS build
 COPY . /src
 WORKDIR "/src/"
 
-RUN dotnet restore
+
 RUN dotnet build
 
 FROM build AS publish
