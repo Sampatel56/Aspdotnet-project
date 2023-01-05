@@ -33,18 +33,44 @@ stages:
             inputs:
               command: 'custom'
               custom: 'ef'
-              arguments: 'database update --project=AspNetCoreTests/AspNetCoreTests.Web/AspNetCoreTests.Web.csproj'
-          # - task: PublishBuildArtifacts@1
-          #   inputs:
-          #     PathtoPublish: '$(Build.SourcesDirectory)/SQL'
-          #     ArtifactName: 'drop'
-          #     publishLocation: 'Container'
-          - task: DockerInstaller@0
+              arguments: 'database update --project=AspNetCoreTests/AspNetCoreTests.Web/'
+          - task: DotNetCoreCLI@2
+            displayName: Build
             inputs:
-              dockerVersion: '17.09.0-ce'
-          - task: Docker@2
+              command: 'build'
+              projects: 'AspNetCoreTests/AspNetCoreTests.UnitTests/AspNetCoreTests.UnitTests.csproj'
+              arguments: '--configuration $(BuildConfiguration)'
+          - task: DotNetCoreCLI@2
+            displayName: Publish
             inputs:
-              containerRegistry: 'aspdotnet'
-              repository: 'aspdotnet2023'
-              command: 'buildAndPush'
-              Dockerfile: '**/Dockerfile'
+              command: 'publish'
+              publishWebProjects: true
+              arguments: '--output $(build.artifactstagingdirectory)'
+          - task: PublishBuildArtifacts@1
+            displayName: PublishBuildArtifacts
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+
+  - stage: Deploy
+    jobs:
+      - job: deploy
+        pool:
+         vmImage: 'ubuntu-latest'
+        steps:
+          - task: DownloadBuildArtifacts@1
+            displayName: DownloadBuildArtifacts
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: AzureRmWebAppDeployment@4
+            displayName: Webapp Deploy
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure subscription 1(1)(62d23974-1452-401f-ae2f-b88e5377196d)'
+              appType: 'webAppLinux'
+              WebAppName: 'giggio'
+              packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
