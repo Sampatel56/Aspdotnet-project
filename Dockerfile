@@ -1,15 +1,15 @@
-FROM mcr.microsoft.com/dotnet/sdk:6 AS sdk
-FROM mcr.microsoft.com/dotnet/aspnet:6 AS runtime
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS sdk
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 
 FROM sdk AS build
 COPY . /src
-WORKDIR "/src/"
+WORKDIR "/src/AspNetCoreTests.Web/"
 
 RUN dotnet restore
 RUN dotnet build
 
 FROM build AS publish
-WORKDIR "/src/"
+WORKDIR "/src/AspNetCoreTests.Web/"
 RUN dotnet publish -c Release -o /app
 
 FROM runtime AS final
